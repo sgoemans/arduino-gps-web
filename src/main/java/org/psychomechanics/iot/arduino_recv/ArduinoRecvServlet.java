@@ -40,7 +40,7 @@ import org.sonatype.plexus.components.cipher.Base64;
 
 public class ArduinoRecvServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private String curPos = "47.117075,10.541476,2.324170";
+	private String currentGpsPos = "47.117075,10.541476,2.324170";
 
 	private String id;
 	private String key;
@@ -92,10 +92,10 @@ public class ArduinoRecvServlet extends HttpServlet {
 			String alt = request.getParameter("alt");
 
 			if(lat == null && lng == null & alt == null) {
-				response.getWriter().append(curPos);
+				response.getWriter().append(currentGpsPos);
 
 			} else {
-				curPos = lat + "," + lng + "," + alt;
+				currentGpsPos = lat + "," + lng + "," + alt;
 
 				String query = "INSERT INTO coords ("
 						+ " pk,"
@@ -125,11 +125,11 @@ public class ArduinoRecvServlet extends HttpServlet {
 				try (BufferedWriter writer = Files.newBufferedWriter(FILE_PATH, StandardCharsets.UTF_8,
 						Files.exists(FILE_PATH) ? StandardOpenOption.APPEND : StandardOpenOption.CREATE)) {
 					writer.write(ZonedDateTime.now().format(DateTimeFormatter.RFC_1123_DATE_TIME));
-					writer.write(curPos + "\n");
+					writer.write(currentGpsPos + "\n");
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				response.getWriter().append(curPos);
+				response.getWriter().append(currentGpsPos);
 			}
 		}
 	}
